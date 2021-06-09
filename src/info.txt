@@ -1,0 +1,11 @@
+    DVF
+    "ag-grid": "^18.1.2",   
+    "ag-grid-react": "^25.3.0",
+    "animate.css": "^4.1.1",
+    "classnames": "^2.3.1", //multiple classes
+    "highcharts": "^5.0.14",
+    "prop-types": "^15.7.2",  //in context
+    "react-bootstrap-sweetalert": "^5.2.0",
+    "react-datetime": "^2.16.3", - peer - moment
+    "react-toastr": "^3.0.0",
+    "react-select": "^4.3.1",  //Select in dropdown
