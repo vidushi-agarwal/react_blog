@@ -6,6 +6,7 @@ import { Modal,ModalHeader,ModalBody } from 'reactstrap';
 import {refreshTokenSetup} from '../utils/refreshToken';
 import {Form} from 'react-bootstrap';
 import classNames from 'classnames';
+// import json from '../users.json';
 const clientId='128810000233-63djpt3pr2rr2moav2ghbijsqtpkr0cv.apps.googleusercontent.com';
 export default class Login extends Component {
     constructor(props,context) {
@@ -18,9 +19,10 @@ export default class Login extends Component {
             email:'',
             },
             showCreateUserModal:false,
-            isFormFullButton:false,
+            isFormFullButton:true,
          };
         autoBind(this);
+        
     }
     handleSuccess(res){
         console.log("loggedin", res.profileObj);
@@ -30,21 +32,75 @@ export default class Login extends Component {
         
     }
     openCreateUserModal(){
-        this.setState({ showCreateUserModal: true });
+        this.setState(prevState => ({
+            showCreateUserModal: !prevState.showCreateUserModal
+          }));
+        // this.setState({ showCreateUserModal: true });
     }
     closeCreateUserModal(){
-        this.setState({ showCreateUserModal: false });
+        this.setState(prevState => ({
+            showCreateUserModal: !prevState.showCreateUserModal
+          }));
     }
     handleFailure(){
         console.log("logged out");
     }
     handleSubmit(event){
+        event.preventDefault();
+        var action = '';
+        action=event.currentTarget.attributes[0].ownerDocument.activeElement.id.toString();
+        console.log(action);
+        var newData=this.state.user;
+        this.setState({ user:newData  });
+        this.closeCreateUserModal();
         this.props.saveLoggedInProperties(this.state.loggedIn,this.state.user.name,this.state.user.id,this.state.user.email);
+        var ar=[];
+        ar.push(this.state.user);
+        console.log(ar);
+        
+        // RestApi._post(RestApi.getBloggerServiceUrl()+actions,ar)
+        // .then(resp => {
+        //     if( resp.status === 200){
+        //         resp.json().then(json => {
+                    this.context.updateMessage('Changes are saved ', 'success');
+        //         });
+        //     } else {
+        //         resp.json().then(json=>{
+        //             this.context.updateMessage(json.apierror.message,'error');
+        //         });
+        //     }
+        // })
+        // .catch(err =>{
+        //     console.log(err.message);
+        //     this.context.updateMessage(err.message,'error');
+        // });
+        
     }
     handleChange(event){
         const newData=this.state.user;
         newData[event.target.id] = event.currentTarget.value;
         this.setState({user:newData});
+        // ##############check userid should not be duplicate ###############
+        // var data = JSON.parse(json.toString());  //parse the JSON
+        // data.users.push({        //add the employee
+        //     firstName:"Mike",
+        //     lastName:"Rut",
+        //     time:"10:00 am",
+        //     email:"rut@bah.com",
+        //     phone:"800-888-8888",
+        //     image:"images/mike.jpg"
+        // });
+        // var txt = JSON.stringify(data);  //reserialize to JSON
+        // console.log(txt);
+        // var results = [];
+        // var searchField = "userName";
+        // var searchVal = "test Name";
+        // for (var i=0 ; i < txt.users.length ; i++)
+        // {
+        //     if (txt.list[i][searchField] === searchVal) {
+        //         results.push(txt.list[i]);
+        //     }
+        // }
 
     }
     render() { 
@@ -108,7 +164,9 @@ Login.contextTypes={
     loggedIn:PropTypes.bool.isRequired,
     userId:PropTypes.string.isRequired,
     userName:PropTypes.string.isRequired,
+    updateMessage: PropTypes.func.isRequired,
 };
  
 
  
+//code source: https://dev.to/sivaneshs/add-google-login-to-your-react-apps-in-10-mins-4del

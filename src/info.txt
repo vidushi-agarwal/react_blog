@@ -9,3 +9,9 @@
     "react-datetime": "^2.16.3", - peer - moment
     "react-toastr": "^3.0.0",
     "react-select": "^4.3.1",  //Select in dropdown
+
+    Issues:
+    1.this.openmodal might not work because we were already setting loggedIn=true before and which might cause <logout> component to render
+    (arrow function is also not working)
+    2.thiscloseModal() is also not working in proper sequence, this is causing toast message to not come while submitting, it is coming while mounting in navbar
+    3. taost is not getting closed

@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
-import autobind from 'react-autobind';
+import autoBind from 'react-autobind';
 import PropTypes from 'prop-types';
 import {Navbar,NavbarBrand,Nav, NavItem, NavLink,Collapse} from 'reactstrap';
+import { withRouter } from 'react-router';
 
-export default class NavBarSecond extends Component {
+class NavBarSecond extends Component {
     constructor(props,context){
         super(props,context);
     this.state = {  };
-    autobind(this);
+    // this.navigation=[
+    //   {linkText: 'Home', linkUrl: '/'},
+    //   {linkText: 'Articles', linkUrl:'/articles'},
+    //   {linkText: 'SocialMedia', linkUrl:'#',
+    //    subNavigation:[
+    //      {linkText: 'Facebook', linkUrl: '/facebook'},
+    //   {linkText: 'Instagram', linkUrl:'/instagram'}
+    //   ]
+    //   },
+    // ];
+    autoBind(this);
     }
     render() { 
         return ( 
@@ -19,7 +30,7 @@ export default class NavBarSecond extends Component {
                   <NavLink href="/">Home</NavLink>
                 </NavItem>
                 <NavItem className="pull-right pt-0 pb-0 pr-5">
-                  <NavLink href="/">Article</NavLink>
+                  <NavLink  href="/articles">Article</NavLink>
                 </NavItem>
                 <NavItem className="pull-right pt-0 pb-0 pr-5">
                   <NavLink href="/">Social Media</NavLink>
@@ -38,4 +49,4 @@ NavBarSecond.contextTypes={
   stalkedUserId:PropTypes.string,
 
 };
- 
+export default withRouter(NavBarSecond);

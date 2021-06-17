@@ -1,15 +1,18 @@
 import React from 'react';
-import autobind from 'react-autobind';
+import autoBind from 'react-autobind';
 import {Navbar,NavbarBrand,Collapse, Nav, NavItem, NavLink,DropdownItem,UncontrolledDropdown,DropdownToggle,DropdownMenu} from 'reactstrap';
-import { BrowserRouter as Router,Switch } from "react-router-dom";
+import { BrowserRouter as Router,Switch,Route } from "react-router-dom";
 import NavBarSecond from './navbarSecond';
 import PropTypes from 'prop-types';
 import Logout from './logout';
 import Login from './login';
-
+import {ToastContainer, ToastMessageAnimated} from 'react-toastr';
+import Articles from './articles';
+import Home from './home';
 export default class NavBar extends React.Component {
     constructor(props){
         super(props);
+        this.toastMessageFactory=React.createFactory(ToastMessageAnimated);
         this.state={
           navbarOpen: true,
           loggedIn: false, //stalker needs to be logged to follow the @stalkedUser
@@ -19,10 +22,11 @@ export default class NavBar extends React.Component {
           followers: 23,//stalked
           stalkedUserId:'thestalked'
         };
-        autobind(this);
+        
+        autoBind(this);
     }
     componentDidMount(){
-
+      this.addAlert("hello",'error');
     }
     getChildContext(){
       return{
@@ -31,8 +35,13 @@ export default class NavBar extends React.Component {
         userId: this.state.userId,
         userEmail: this.state.userEmail,
         followers:this.state.followers,
-        stalkedUserId:this.state.stalkedUserId
+        stalkedUserId:this.state.stalkedUserId,
+        updateMessage: this.addAlert,
       }
+    }
+    addAlert(msg,type){
+      const title = type.charAt(0).toUpperCase()+type.slice(1);
+      this.container[type](msg,title,{closeButton:true,timeOut:30000,extendedTimeOut:9000});
     }
     handleFollow(){
       this.setState({followers:this.state.followers+1});
@@ -43,9 +52,6 @@ export default class NavBar extends React.Component {
       this.setState({userId:userId});
       this.setState({userEmail:userEmail});
     }
-    // saveUserId(userId){
-    //   this.setState({userId:userId});
-    // }
     saveLoggedOffProperty(loggedIn){
       this.setState({loggedIn:loggedIn});
     }
@@ -53,7 +59,8 @@ export default class NavBar extends React.Component {
     render() {
       const NavBarInstance=()=>{
         return (
-          <div>
+          <div className='container-fluid'>
+            <ToastContainer ref={(input) => {this.container = input;}} toastMessageFactory={this.toastMessageFactory} className='toast-top-right' />
           <div >
             <Navbar fluid expand="lg" className="fixed-top" color="light" light>
               <NavbarBrand>Blogger</NavbarBrand>
@@ -77,7 +84,6 @@ export default class NavBar extends React.Component {
               <DropdownMenu right>
                 <DropdownItem>
                   <Login saveLoggedInProperties={(loggedIn,userName,userId,userEmail)=>this.saveLoggedInProperties(loggedIn,userName,userId,userEmail)} />
-                 {/* <Login saveLoggedInProperties={(loggedIn,userName,userId,userEmail)=>this.saveLoggedInProperties(loggedIn,userName,userId,userEmail)} saveUserId={(userId)=>this.saveUserId(userId)}/> */}
                 </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
@@ -112,30 +118,28 @@ export default class NavBar extends React.Component {
             <div style={{paddingTop:56}} >
             <NavBarSecond/>
             </div>
-            
             </div>
           
          );
     }
-  
-  return(
-     
-          <Router>
-            <div className='fixed-layout'>
-            <header><NavBarInstance/>
-            </header>
-          <div className='container-fluid'>
+    return (
+      <Router>
+        <div className="fixed-layout">
+          <header>
+            <NavBarInstance />
+          </header>
+          <div className="container-fluid">
             <main>
-          <Switch>
-            {/* <Route path='/' exact component={Home} /> */}
-             
-          </Switch>
-          {/* <Footer /> */}
-          </main>
+              <Switch>
+                <Route path="/" exact props render={(props) => <Home />} />
+                <Route path="/articles" props render={(props) => <Articles />} />
+              </Switch>
+              {/* <Footer /> */}
+            </main>
           </div>
-          </div>
-        </Router>
-  );
+        </div>
+      </Router>
+    );
 }
 }
 NavBar.childContextTypes={
@@ -144,7 +148,8 @@ NavBar.childContextTypes={
   userName:PropTypes.string,
   userEmail:PropTypes.string,
   followers:PropTypes.number,
-  stalkedUserId:PropTypes.string
+  stalkedUserId:PropTypes.string,
+  updateMessage:PropTypes.func
 
 };
 
