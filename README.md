@@ -1,6 +1,6 @@
-Referred to [this] (https://www.youtube.com/watch?v=Ke90Tje7VS0&ab_channel=ProgrammingwithMosh) tutorial
-Get some good Visual Studio Extensions
-Check how to debug in react- developer- tools
+- Refer to [this](https://www.youtube.com/watch?v=Ke90Tje7VS0&ab_channel=ProgrammingwithMosh) tutorial
+- Get some good Visual Studio Extensions
+- Check how to debug in react- developer- tools
 You are good to go👊
 # Getting Started with Create React App
 
